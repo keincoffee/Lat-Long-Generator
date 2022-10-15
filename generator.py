@@ -1,7 +1,7 @@
 # Importing Modules
 import numpy as np
 import random
-# Use 'conda install shapely' to import the shapely library.
+import csv
 from shapely.geometry import Polygon, Point
 
 # Sample Sub Region Polygons
@@ -19,9 +19,21 @@ w1Poly = Polygon([(-102.3046875, 40.8470604),(-109.1601563, 40.9135126),(-110.91
 w2Poly = Polygon([(-114.0161133, 42.0166518),(-119.0039063, 42.0492926),(-124.2773438, 41.9022770),(-124.0356445, 41.1455697),(-124.4091797, 40.4302236),(-123.5742188, 38.7198047),(-122.9589844, 38.0826895),(-122.5854492, 37.6142314),(-121.9482422, 36.3151251),(-120.4980469, 34.1618182),(-119.1137695, 34.0890613),(-117.9492188, 33.6146193),(-117.2460938, 32.4726950),(-114.6972656, 32.5468132),(-114.1699219, 34.5246615),(-114.2578125, 36.1023764),(-114.0380859, 41.9349765)])
 w3Poly = Polygon([(-125.1562500, 48.5747899),(-123.9257813, 45.5217439),(-124.4531250, 42.0329743),(-110.8740234, 42.0982224),(-111.0937500, 44.2766713),(-112.9394531, 44.4023918),(-114.4335938, 45.5832898),(-116.1914063, 48.8647148),(-122.6513672, 49.1242192),(-123.0468750, 48.2246726),(-125.0683594, 48.5166043)])
 
+# Number of Sample Accounts
+accountNumber_ne1 = 2110
+accountNumber_ne2 = 1824
+accountNumber_ne3 = 1051
+accountNumber_se1 = 1225
+accountNumber_se2 = 1665
+accountNumber_se3 = 1174
+accountNumber_c1 = 1349
+accountNumber_c2 = 1831
+accountNumber_c3 = 1193
+accountNumber_w1 = 1416
+accountNumber_w2 = 842
+accountNumber_w3 = 696
 
-
-#Defining the randomization generator
+# Defining the randomization generator
 def polygon_random_points (poly, num_points):
     min_x, min_y, max_x, max_y = poly.bounds
     points = []
@@ -31,10 +43,33 @@ def polygon_random_points (poly, num_points):
             points.append(random_point)
     return points
 
-# Choose the number of points desired. This example uses 2 points. 
-tpoints = polygon_random_points(ne1Poly, 2)
+# Run formulas and create array
+ne1points = polygon_random_points(ne1Poly, accountNumber_ne1)
+ne2points = polygon_random_points(ne2Poly, accountNumber_ne2)
+ne3points = polygon_random_points(ne3Poly, accountNumber_ne3)
+se1points = polygon_random_points(se1Poly, accountNumber_se1)
+se2points = polygon_random_points(se2Poly, accountNumber_se2)
+se3points = polygon_random_points(se3Poly, accountNumber_se3)
+c1points = polygon_random_points(c1Poly, accountNumber_c1)
+c2points = polygon_random_points(c2Poly, accountNumber_c2)
+c3points = polygon_random_points(c3Poly, accountNumber_c3)
+w1points = polygon_random_points(w1Poly, accountNumber_w1)
+w2points = polygon_random_points(w2Poly, accountNumber_w2)
+w3points = polygon_random_points(w3Poly, accountNumber_w3)
 
-# Printing the results.
-for p in tpoints:
-    print(p.x,",",p.y)
+bodyArray = np.concatenate(( ne1points, ne2points, ne3points, se1points, se2points, se3points, c1points, c2points, c3points, w1points, w2points, w3points))
+
+# Header Array
+headerArray = [["Latitude","Longitude"]]
+
+# Final Array
+finArray = [[p.x,p.y] for p in bodyArray]
+
+# Writer Array
+writerArray = np.concatenate((headerArray,finArray))
+
+# Create CSV
+with open("test.csv","w+") as my_csv:
+    csvWriter = csv.writer(my_csv,delimiter=',')
+    csvWriter.writerows(writerArray)
 

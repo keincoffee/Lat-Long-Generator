@@ -60,7 +60,7 @@ w3points = polygon_random_points(w3Poly, accountNumber_w3)
 bodyArray = np.concatenate(( ne1points, ne2points, ne3points, se1points, se2points, se3points, c1points, c2points, c3points, w1points, w2points, w3points))
 
 # Header Array
-headerArray = [["Latitude","Longitude"]]
+headerArray = [["Longitude","Latitude"]]
 
 # Final Array
 finArray = [[p.x,p.y] for p in bodyArray]
